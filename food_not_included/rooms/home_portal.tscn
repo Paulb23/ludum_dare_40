@@ -36,7 +36,6 @@ autostart = true
 
 frames = SubResource( 1 )
 animation = "default"
-frame = 2
 playing = true
 
 

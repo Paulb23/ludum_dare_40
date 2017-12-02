@@ -37,6 +37,8 @@ _sections_unfolded = [ "Cell", "Transform" ]
 
 [node name="buildings" type="Node2D" parent="."]
 
+[node name="workers" type="Node2D" parent="."]
+
 [node name="camera" type="Camera2D" parent="."]
 
 anchor_mode = 0
@@ -63,7 +65,5 @@ script = ExtResource( 3 )
 _sections_unfolded = [ "Drag Margin", "Editor", "Limit", "Smoothing", "Transform" ]
 
 [node name="game_ui" parent="camera" instance=ExtResource( 4 )]
-
-[node name="workers" type="Node2D" parent="."]
 
 

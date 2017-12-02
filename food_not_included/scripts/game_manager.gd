@@ -87,7 +87,7 @@ func get_path(worker, path_to):
 
 func hit_tile(worker, tile, dmg):
 	var tile_id  = world.get_cell(tile.x, tile.y)
-	if (tile_size.tile_get_name(tile_id).contains("mine")):
+	if (tile_set.tile_get_name(tile_id).find("mine") > -1):
 		if (!world.has_meta(String(tile))):
 			world.set_meta(String(tile), String(50))
 		world.set_meta(String(tile), String(int(world.get_meta(String(tile))) - dmg))
@@ -100,7 +100,8 @@ func hit_tile(worker, tile, dmg):
 
 func _input(event):
 	if (event is InputEventMouseButton):
-		var tile = Vector2(int(event.position.x) / tile_size, int(event.position.y) / tile_size)
+		var cam_pos = get_node("camera").position
+		var tile = Vector2(int(cam_pos.x + event.position.x) / tile_size, int(cam_pos.y + event.position.y) / tile_size)
 		if (event.is_action_released("left_click") && !ui.in_ui(event.position.y)):
 			match ui.current_selected:
 				UI.Tool.REMOVE:

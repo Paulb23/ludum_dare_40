@@ -58,6 +58,7 @@ _sections_unfolded = [ "Transform" ]
 
 navpoly = SubResource( 7 )
 enabled = true
+_sections_unfolded = [ "Transform" ]
 
 [node name="wall_top" type="Sprite" parent="."]
 

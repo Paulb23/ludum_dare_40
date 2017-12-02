@@ -21,10 +21,10 @@ func _input(event):
 		return
 
 	if (event is InputEventMouseMotion):
-		var tile = Vector2(int(event.position.x) / tile_size, int(event.position.y) / tile_size)
+		var tile = Vector2(int(event.position.x - get_position().x) / tile_size, int(event.position.y) / tile_size)
 		tile *= tile_size
-		tile.x += tile_size / 4
-		tile.y += tile_size / 4
+		tile.x += tile_size / 2
+		tile.y += tile_size / 2
 		mouse_icon.set_position(tile)
 
 func remove_tiles():

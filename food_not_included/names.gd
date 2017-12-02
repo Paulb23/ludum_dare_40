@@ -10166,5 +10166,5 @@ const names = [
 "zylen"
 ]
 
-func get_name():
+static func get_name():
 	return names[int(rand_range(0, names.size()))]
