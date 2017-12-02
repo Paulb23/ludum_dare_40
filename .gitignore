@@ -2,3 +2,4 @@ export.cfg
 .fscache
 .swp
 /builds
+*.import
