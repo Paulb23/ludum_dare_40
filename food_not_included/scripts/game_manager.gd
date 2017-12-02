@@ -15,14 +15,14 @@ var tile_size = 24
 
 var world_size = 100
 
-var world 
+var world
 var tile_set
 
 var process_jobs_timer
 var jobs = []
 var waiting_wokers = []
 
-var ui 
+var ui
 var buildings
 var workers
 var portal
@@ -41,7 +41,7 @@ func _ready():
 	process_jobs_timer.start()
 	process_jobs_timer.connect("timeout", self, "process_waiting_workers")
 	add_child(process_jobs_timer)
-	
+
 	get_node("camera").world_size = world_size * tile_size
 	get_node("camera").focus_center()
 	ui = get_node("camera/game_ui")
@@ -66,12 +66,12 @@ func process_waiting_workers():
 			waiting_wokers[i].assign_job(job)
 			waiting_wokers.remove(i)
 		i -= 1
-	
+
 func get_job():
 	if (jobs.size() <= 0):
 		return Job.new("null", Job.Type.NONE, Vector2(0,0))
 	return jobs.pop_back()
-	
+
 func create_job(job):
 	print("new job created " + job.name)
 	jobs.push_front(job)
@@ -101,12 +101,12 @@ func hit_tile(worker, tile, dmg):
 func _input(event):
 	if (event is InputEventMouseButton):
 		var tile = Vector2(int(event.position.x) / tile_size, int(event.position.y) / tile_size)
-		if (event.is_action_released("left_click")):
+		if (event.is_action_released("left_click") && !ui.in_ui(event.position.y)):
 			match ui.current_selected:
 				UI.Tool.REMOVE:
 					var job = Job.new("Mining " + String(tile), Job.Type.MINE, tile)
 					create_job(job)
-					
+
 func create_world():
 	for x in range(0, world_size):
 		for y in range(0, world_size):
@@ -116,14 +116,14 @@ func create_world():
 			else :
 				tile_id = 7
 			world.set_cell(x, y, tile_id)
-	
+
 	var center = world_size / 2
 	# make sure we have enough space
 	for x in range(center - 3, center + 3):
 		for y in range(center - 3, center + 3):
 			var tile_id = tile_set.find_tile_by_name("ground_normal")
 			world.set_cell(x, y, tile_id)
-			
+
 	# load portal
 	world.set_cell(center, center, -1)
 	world.set_cell(center - 1, center, -1)

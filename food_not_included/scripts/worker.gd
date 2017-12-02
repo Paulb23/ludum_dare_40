@@ -30,15 +30,15 @@ var name = "worker"
 func _ready():
 	mining_timer = get_node("mining_timer")
 	mining_timer.connect("timeout", self, "set_can_mine")
-	
+
 func _physics_process(delta):
-	self.delta = delta 
-	
+	self.delta = delta
+
 	if (!has_job && !waiting_for_job):
 		print(name + " is requesting a new job")
 		waiting_for_job = true
 		emit_signal("request_job", self)
-	
+
 	if (!has_job):
 		return
 	match assigned_job.type:
@@ -61,8 +61,8 @@ func _physics_process(delta):
 				emit_signal("hit_tile", self, assigned_job.pos, mining_dmg);
 				can_mine = false
 				mining_timer.start()
-				
-				
+
+
 func move_to_position(target):
 	if (!has_path && !waiting_for_path):
 		print(name + " is requesting navigation path")
@@ -74,13 +74,13 @@ func move_to_position(target):
 			at_target = true;
 			print(name + " has reached their target")
 			return
-			
+
 		var target_pos = path[path_offset]
 		var distance = self.get_position().distance_to(target_pos)
-		
+
 		if (distance < speed * delta):
 			path_offset += 1
-			
+
 			if (path_offset == path.size()):
 				has_path = false;
 				at_target = true;
@@ -102,17 +102,17 @@ func assign_job(new_job):
 	has_job = true
 	waiting_for_job = false
 	at_target = false
-	
+
 func assign_path(new_path):
 	print(name + " has recived navigation path ")
 	path = new_path
 	path_offset = 0
 	has_path = true
 	waiting_for_path = false
-	
+
 func set_can_mine():
 	can_mine = true
-	
+
 func notify_tile_removed():
 	match assigned_job.type:
 		Job.Type.MINE:

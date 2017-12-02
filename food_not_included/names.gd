@@ -10168,4 +10168,3 @@ const names = [
 
 func get_name():
 	return names[int(rand_range(0, names.size()))]
-	
