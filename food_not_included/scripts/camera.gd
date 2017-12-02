@@ -3,10 +3,17 @@ extends Camera2D
 var shakeTime = 0
 var amount = 0
 var speed = 5
+var world_size = 0
 
 func shake(time, amount):
 	self.shakeTime = time
 	self.amount = amount
+
+func focus_center():
+	var x_off = get_viewport().get_visible_rect().end.x / 2
+	var y_off = get_viewport().get_visible_rect().end.y / 2 
+	var size = world_size / 2
+	self.position = Vector2(size - x_off, size - y_off)
 
 func _physics_process(delta):
 	if (shakeTime > 0):
@@ -32,3 +39,8 @@ func _physics_process(delta):
 	if (position.y < 0):
 		position.y = 0
 		
+	if (position.x + get_viewport().get_visible_rect().end.x > world_size):
+		position.x = world_size - get_viewport().get_visible_rect().end.x
+		
+	if (position.y + get_viewport().get_visible_rect().end.y > world_size):
+		position.y = world_size - get_viewport().get_visible_rect().end.y

@@ -25,6 +25,8 @@ var mining_dmg = 10
 var mining_timer
 var can_mine = true;
 
+var name = "worker"
+
 func _ready():
 	mining_timer = get_node("mining_timer")
 	mining_timer.connect("timeout", self, "set_can_mine")
@@ -33,7 +35,7 @@ func _physics_process(delta):
 	self.delta = delta 
 	
 	if (!has_job && !waiting_for_job):
-		print(get_name() + " is requesting a new job")
+		print(name + " is requesting a new job")
 		waiting_for_job = true
 		emit_signal("request_job", self)
 	
@@ -49,13 +51,13 @@ func _physics_process(delta):
 			if (!at_target):
 				move_to_position(assigned_job.pos)
 				if (at_target && self.get_position().distance_to(assigned_job.pos * tile_size) < 25):
-					print(get_name() + " Starting to mine")
+					print(name + " Starting to mine")
 					mining = true
 				elif(at_target):
-					print(get_name() + " job is out of reach, quitting..")
+					print(name + " job is out of reach, quitting..")
 					has_job = false
 			if (mining && can_mine):
-				print(get_name() + " attempts to hits tile " + String(assigned_job.pos))
+				print(name + " attempts to hits tile " + String(assigned_job.pos))
 				emit_signal("hit_tile", self, assigned_job.pos, mining_dmg);
 				can_mine = false
 				mining_timer.start()
@@ -63,14 +65,14 @@ func _physics_process(delta):
 				
 func move_to_position(target):
 	if (!has_path && !waiting_for_path):
-		print(get_name() + " is requesting navigation path")
+		print(name + " is requesting navigation path")
 		waiting_for_path = true
 		emit_signal("request_path", self, target)
 	if (has_path):
 		if (path.size() <= 0):
 			has_path = false;
 			at_target = true;
-			print(get_name() + " has reached their target")
+			print(name + " has reached their target")
 			return
 			
 		var target_pos = path[path_offset]
@@ -82,7 +84,7 @@ func move_to_position(target):
 			if (path_offset == path.size()):
 				has_path = false;
 				at_target = true;
-				print(get_name() + " has reached their target")
+				print(name + " has reached their target")
 		else:
 			var delta_x = target_pos.x - self.get_position().x
 			var delta_y = target_pos.y - self.get_position().y
@@ -95,14 +97,14 @@ func move_to_position(target):
 		set_position(target_pos)
 
 func assign_job(new_job):
-	print(get_name() + " has picked up job " + String(new_job.name) + " of type " + String(new_job.type))
+	print(name + " has picked up job " + String(new_job.name) + " of type " + String(new_job.type))
 	assigned_job = new_job
 	has_job = true
 	waiting_for_job = false
 	at_target = false
 	
 func assign_path(new_path):
-	print(get_name() + " has recived navigation path ")
+	print(name + " has recived navigation path ")
 	path = new_path
 	path_offset = 0
 	has_path = true
@@ -114,6 +116,6 @@ func set_can_mine():
 func notify_tile_removed():
 	match assigned_job.type:
 		Job.Type.MINE:
-			print(get_name() + " removed a tile ")
+			print(name + " removed a tile ")
 			mining = false
 			has_job = false;
