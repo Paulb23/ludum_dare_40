@@ -48,11 +48,13 @@ func _physics_process(delta):
 		Job.Type.MINE:
 			if (!at_target):
 				move_to_position(assigned_job.pos)
-				if (at_target && self.get_position() == assigned_job.pos * tile_size):
+				if (at_target && self.get_position().distance_to(assigned_job.pos * tile_size) < 25):
+					print(get_name() + " Starting to mine")
 					mining = true
 				elif(at_target):
+					print(get_name() + " job is out of reach, quitting..")
 					has_job = false
-			elif (mining && can_mine):
+			if (mining && can_mine):
 				print(get_name() + " attempts to hits tile " + String(assigned_job.pos))
 				emit_signal("hit_tile", self, assigned_job.pos, mining_dmg);
 				can_mine = false
@@ -66,7 +68,11 @@ func move_to_position(target):
 		emit_signal("request_path", self, target)
 	if (has_path):
 		if (path.size() <= 0):
+			has_path = false;
+			at_target = true;
+			print(get_name() + " has reached their target")
 			return
+			
 		var target_pos = path[path_offset]
 		var distance = self.get_position().distance_to(target_pos)
 		

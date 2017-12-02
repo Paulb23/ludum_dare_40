@@ -6,7 +6,7 @@
 [node name="worker" type="Node2D"]
 
 script = ExtResource( 1 )
-_sections_unfolded = [ "Transform" ]
+_sections_unfolded = [ "Transform", "Z" ]
 
 [node name="sprite" type="Sprite" parent="."]
 
