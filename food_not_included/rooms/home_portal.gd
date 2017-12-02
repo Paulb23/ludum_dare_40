@@ -17,7 +17,10 @@ func create_worker():
 	worker_timer.set_wait_time(rand_range(90, 300))
 	
 func _physics_process(delta):
-	pass
+	if (worker_timer.get_time_left() < 5):
+		get_node("AnimatedSprite").play("spawning")
+	else:
+		get_node("AnimatedSprite").play("default")
 
 func get_tile_size():
 	return Vector2(2, 2)

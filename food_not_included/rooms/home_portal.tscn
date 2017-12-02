@@ -1,16 +1,29 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://rooms/home_portal.gd" type="Script" id=1]
-[ext_resource path="res://tiles/portal.png" type="Texture" id=2]
+[ext_resource path="res://tiles/portal1.png" type="Texture" id=2]
+[ext_resource path="res://tiles/portal2.png" type="Texture" id=3]
+[ext_resource path="res://tiles/portal3.png" type="Texture" id=4]
+[ext_resource path="res://tiles/portal1_normal1.png" type="Texture" id=5]
+
+[sub_resource type="SpriteFrames" id=1]
+
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ), ExtResource( 4 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "spawning",
+"speed": 5.0
+} ]
 
 [node name="home_portal" type="Node2D"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
-
-[node name="portal" type="Sprite" parent="."]
-
-texture = ExtResource( 2 )
 
 [node name="worker_check" type="Timer" parent="."]
 
@@ -18,5 +31,12 @@ process_mode = 1
 wait_time = 1.0
 one_shot = false
 autostart = true
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+
+frames = SubResource( 1 )
+animation = "default"
+frame = 2
+playing = true
 
 
