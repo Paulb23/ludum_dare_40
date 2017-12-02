@@ -28,11 +28,11 @@ var workers
 var portal
 
 func _ready():
+	rand_seed(OS.get_unix_time())
 	buildings = get_node("buildings")
 	workers = get_node("workers")
 	world = get_node("navigation/world")
 	tile_set = world.tile_set
-	soft_noise = noise.SoftNoise.new()
 	soft_noise = noise.SoftNoise.new(OS.get_unix_time())
 	create_world()
 	process_jobs_timer = Timer.new()
@@ -61,7 +61,7 @@ func process_waiting_workers():
 	var i = waiting_wokers.size() - 1
 	while (i > 0):
 		var job = get_job()
-		if (job.type != Job.Type.NONE):
+		if (job):
 			print("assiging " + waiting_wokers[i].name + " to " + job.name)
 			waiting_wokers[i].assign_job(job)
 			waiting_wokers.remove(i)
@@ -69,7 +69,7 @@ func process_waiting_workers():
 
 func get_job():
 	if (jobs.size() <= 0):
-		return Job.new("null", Job.Type.NONE, Vector2(0,0))
+		return null
 	return jobs.pop_back()
 
 func create_job(job):

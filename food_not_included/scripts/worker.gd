@@ -39,28 +39,27 @@ func _physics_process(delta):
 		waiting_for_job = true
 		emit_signal("request_job", self)
 
-	if (!has_job):
-		return
-	match assigned_job.type:
-		Job.Type.MOVE:
-			if (!at_target):
-				move_to_position(assigned_job.pos)
-			else:
-				has_job = false
-		Job.Type.MINE:
-			if (!at_target):
-				move_to_position(assigned_job.pos)
-				if (at_target && self.get_position().distance_to(assigned_job.pos * tile_size) < 25):
-					print(name + " Starting to mine")
-					mining = true
-				elif(at_target):
-					print(name + " job is out of reach, quitting..")
+	if (has_job):
+		match assigned_job.type:
+			Job.Type.MOVE:
+				if (!at_target):
+					move_to_position(assigned_job.pos)
+				else:
 					has_job = false
-			if (mining && can_mine):
-				print(name + " attempts to hits tile " + String(assigned_job.pos))
-				emit_signal("hit_tile", self, assigned_job.pos, mining_dmg);
-				can_mine = false
-				mining_timer.start()
+			Job.Type.MINE:
+				if (!at_target):
+					move_to_position(assigned_job.pos)
+					if (at_target && self.get_position().distance_to(assigned_job.pos * tile_size) < 25):
+						print(name + " Starting to mine")
+						mining = true
+					elif(at_target):
+						print(name + " job is out of reach, quitting..")
+						has_job = false
+				if (mining && can_mine):
+					print(name + " attempts to hits tile " + String(assigned_job.pos))
+					emit_signal("hit_tile", self, assigned_job.pos, mining_dmg);
+					can_mine = false
+					mining_timer.start()
 
 
 func move_to_position(target):
