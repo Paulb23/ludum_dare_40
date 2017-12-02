@@ -4,8 +4,10 @@ var Job = preload("res://Job.gd")
 
 signal request_job
 signal request_path
+signal hit_tile
 
 var delta
+var tile_size = 24
 
 var waiting_for_job = false
 var has_job = false
@@ -18,6 +20,8 @@ var at_target = false
 var path_offset = 0
 var path
 
+var mining = false
+var mining_dmg = 10
 var mining_timer
 var can_mine = true;
 
@@ -44,8 +48,13 @@ func _physics_process(delta):
 		Job.Type.MINE:
 			if (!at_target):
 				move_to_position(assigned_job.pos)
-			elif (can_mine):
-				print("mining")
+				if (at_target && self.get_position() == assigned_job.pos * tile_size):
+					mining = true
+				elif(at_target):
+					has_job = false
+			elif (mining && can_mine):
+				print(get_name() + " attempts to hits tile " + String(assigned_job.pos))
+				emit_signal("hit_tile", self, assigned_job.pos, mining_dmg);
 				can_mine = false
 				mining_timer.start()
 				
@@ -56,6 +65,8 @@ func move_to_position(target):
 		waiting_for_path = true
 		emit_signal("request_path", self, target)
 	if (has_path):
+		if (path.size() <= 0):
+			return
 		var target_pos = path[path_offset]
 		var distance = self.get_position().distance_to(target_pos)
 		
@@ -93,3 +104,10 @@ func assign_path(new_path):
 	
 func set_can_mine():
 	can_mine = true
+	
+func notify_tile_removed():
+	match assigned_job.type:
+		Job.Type.MINE:
+			print(get_name() + " removed a tile ")
+			mining = false
+			has_job = false;
