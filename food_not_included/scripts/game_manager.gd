@@ -80,9 +80,17 @@ func add_wating_worker(worker):
 	waiting_wokers.push_front(worker)
 
 func get_path(worker, path_to):
-	var tile = Vector2(path_to.x * tile_size, path_to.y * tile_size)
 	get_node("navigation").update()
-	worker.assign_path(get_node("navigation").get_simple_path(worker.position, tile))
+
+	for x in range(-1, 2):
+		for y in range(-1, 2):
+			if (is_walkable_tile(world.get_cell(path_to.x + x, path_to.y + y))):
+				var tile = Vector2(((path_to.x + x) * tile_size) + (tile_size / 2), ((path_to.y + y) * tile_size) + (tile_size / 2))
+				var path = get_node("navigation").get_simple_path(worker.position, tile)
+				if (path.size() > 0):
+					worker.assign_path(path)
+					return
+	worker.assign_path([])
 
 func hit_tile(worker, tile, dmg):
 	var tile_id  = world.get_cell(tile.x, tile.y)
@@ -106,6 +114,9 @@ func _input(event):
 				UI.Tool.REMOVE:
 					var job = Job.new("Mining " + String(tile), Job.Type.MINE, tile)
 					create_job(job)
+
+func is_walkable_tile(tile_id):
+	return (tile_set.tile_get_name(tile_id).find("ground") > -1)
 
 func create_world():
 	for x in range(0, world_size):

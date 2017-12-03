@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 
 var Job = preload("res://Job.gd")
 
@@ -49,7 +49,7 @@ func _physics_process(delta):
 			Job.Type.MINE:
 				if (!at_target):
 					move_to_position(assigned_job.pos)
-					if (at_target && self.get_position().distance_to(assigned_job.pos * tile_size) < 25):
+					if (at_target && self.get_position().distance_to(assigned_job.pos * tile_size) < speed):
 						print(name + " Starting to mine")
 						mining = true
 					elif(at_target):
