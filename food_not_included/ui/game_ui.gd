@@ -5,6 +5,8 @@ enum Tool {
 	REMOVE
 }
 
+signal use_tool
+
 var current_selected = null
 var mouse_icon
 
@@ -18,7 +20,12 @@ func _ready():
 
 	toolgle_action_visible(false)
 
-func _input(event):
+func _gui_input(event):
+	if (event.is_action_released("left_click")):
+		var cam_pos = get_parent().position
+		var tile = Vector2(int(cam_pos.x + event.position.x) / tile_size, int(cam_pos.y + event.position.y) / tile_size)
+		emit_signal("use_tool", tile)
+
 	if (event.is_action_released("right_click")):
 		current_selected = null
 		mouse_icon.texture = null
@@ -49,6 +56,3 @@ func actions_index_pressed(name):
 func remove_tiles():
 	current_selected = Tool.REMOVE
 	mouse_icon.texture = load("res://ui/buttons/remove_icon.png")
-
-func in_ui(y):
-	return false

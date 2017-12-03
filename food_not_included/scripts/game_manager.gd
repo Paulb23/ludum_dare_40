@@ -45,6 +45,7 @@ func _ready():
 	get_node("camera").world_size = world_size * tile_size
 	get_node("camera").focus_center()
 	ui = get_node("camera/game_ui")
+	ui.connect("use_tool", self, "use_tool")
 
 func create_worker():
 	print("Creating new worker")
@@ -105,15 +106,11 @@ func hit_tile(worker, tile, dmg):
 	else:
 		worker.notify_tile_removed()
 
-func _input(event):
-	if (event is InputEventMouseButton):
-		var cam_pos = get_node("camera").position
-		var tile = Vector2(int(cam_pos.x + event.position.x) / tile_size, int(cam_pos.y + event.position.y) / tile_size)
-		if (event.is_action_released("left_click") && !ui.in_ui(event.position.y)):
-			match ui.current_selected:
-				UI.Tool.REMOVE:
-					var job = Job.new("Mining " + String(tile), Job.Type.MINE, tile)
-					create_job(job)
+func use_tool(tile):
+	match ui.current_selected:
+		UI.Tool.REMOVE:
+			var job = Job.new("Mining " + String(tile), Job.Type.MINE, tile)
+			create_job(job)
 
 func is_walkable_tile(tile_id):
 	return (tile_set.tile_get_name(tile_id).find("ground") > -1)
