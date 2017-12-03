@@ -35,6 +35,8 @@ func _ready():
 func _input(event):
 	if (event.is_action_pressed("pause")):
 		paused_pressed()
+	if (event.is_action_released("go_to_portal")):
+		get_parent().focus_center()
 
 func paused_pressed():
 	if (!get_tree().is_paused()):

@@ -307,7 +307,6 @@ func create_world():
 	for x in range(0, world_size):
 		for y in range(0, world_size):
 			var tile_id = soft_noise.openSimplex2D(x, y)
-			print(tile_id)
 			if (tile_id < 0):
 				tile_id = tile_set.find_tile_by_name("ground_normal")
 			else :
