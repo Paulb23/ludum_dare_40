@@ -102,7 +102,6 @@ func move_to_position(target):
 			var new_x_pos = x_move + self.get_position().x
 			var new_y_pos = y_move + self.get_position().y
 			target_pos = Vector2(new_x_pos, new_y_pos)
-		print(target_pos.y , " ",self.get_position().y)
 		if (target_pos.y + 0.5 < self.get_position().y):
 			get_node("sprite").play("up")
 		else:

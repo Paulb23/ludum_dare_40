@@ -12,7 +12,11 @@ var tile_size = 24
 
 func _ready():
 	mouse_icon = get_node("mouse_icon")
-	get_node("remove_tiles").connect("pressed", self, "remove_tiles")
+
+	get_node("actions").connect("pressed", self, "actions_pressed")
+	get_node("actions").connect("item_pressed", self, "actions_index_pressed")
+
+	toolgle_action_visible(false)
 
 func _input(event):
 	if (event.is_action_released("right_click")):
@@ -27,9 +31,24 @@ func _input(event):
 		tile.y += tile_size / 2
 		mouse_icon.set_position(tile)
 
+func actions_pressed():
+	toolgle_action_visible(null)
+
+func toolgle_action_visible(force):
+	for node in get_node("actions").get_children():
+		if (force != null):
+			node.visible = force
+		else:
+			node.visible = !node.visible
+
+func actions_index_pressed(name):
+	toolgle_action_visible(false)
+	if (name == "Clear Tile"):
+		remove_tiles()
+
 func remove_tiles():
 	current_selected = Tool.REMOVE
 	mouse_icon.texture = load("res://ui/buttons/remove_icon.png")
 
 func in_ui(y):
-	return y > get_node("bottom_bar").get_position().y
+	return false
