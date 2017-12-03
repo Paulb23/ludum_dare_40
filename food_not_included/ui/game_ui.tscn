@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://ui/game_ui.gd" type="Script" id=1]
 [ext_resource path="res://ui/actions.gd" type="Script" id=2]
@@ -10,9 +10,11 @@
 [ext_resource path="res://ui/food_icon.png" type="Texture" id=8]
 [ext_resource path="res://ui/plant_icon.png" type="Texture" id=9]
 [ext_resource path="res://ui/population_icon.png" type="Texture" id=10]
+[ext_resource path="res://ui/pause.tscn" type="PackedScene" id=11]
 
 [node name="game_ui" type="Control"]
 
+pause_mode = 2
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -25,7 +27,7 @@ mouse_filter = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 script = ExtResource( 1 )
-_sections_unfolded = [ "Rect", "Transform" ]
+_sections_unfolded = [ "Pause", "Rect", "Transform" ]
 
 [node name="Panel" type="Panel" parent="."]
 
@@ -48,6 +50,7 @@ _sections_unfolded = [ "Offset" ]
 
 [node name="actions" type="Button" parent="."]
 
+pause_mode = 1
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -67,6 +70,7 @@ group = null
 text = "Actions"
 flat = false
 script = ExtResource( 2 )
+_sections_unfolded = [ "Pause" ]
 
 [node name="remove" type="Button" parent="actions"]
 
@@ -93,6 +97,7 @@ _sections_unfolded = [ "Anchor", "Margin" ]
 
 [node name="buildings" type="Button" parent="."]
 
+pause_mode = 1
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -113,7 +118,7 @@ group = null
 text = "Buildings"
 flat = false
 script = ExtResource( 4 )
-_sections_unfolded = [ "Rect" ]
+_sections_unfolded = [ "Pause", "Rect" ]
 
 [node name="algae_gen" type="Button" parent="buildings"]
 
@@ -158,6 +163,30 @@ group = null
 text = "Algae To Food Genorator"
 icon = ExtResource( 6 )
 flat = false
+
+[node name="pause" type="Button" parent="."]
+
+pause_mode = 1
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 904.0
+margin_top = 555.0
+margin_right = 1023.0
+margin_bottom = 575.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "PAUSE"
+flat = false
+_sections_unfolded = [ "Pause" ]
 
 [node name="stone_sprite" type="Sprite" parent="."]
 
@@ -258,5 +287,11 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Margin" ]
+
+[node name="pause_menu" parent="." instance=ExtResource( 11 )]
+
+visible = false
+margin_left = -5.0
+_sections_unfolded = [ "Margin" ]
 
 

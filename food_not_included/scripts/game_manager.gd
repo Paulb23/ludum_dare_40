@@ -23,7 +23,7 @@ var stone_collected = 0
 var food_collected = 0
 var algea_collected = 0
 
-var world_size = 1000
+var world_size = 500
 
 var world
 var tile_set

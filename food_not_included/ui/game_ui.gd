@@ -23,6 +23,7 @@ func _ready():
 	mouse_icon = get_node("mouse_icon")
 
 	get_node("actions").connect("pressed", self, "actions_pressed")
+	get_node("pause").connect("pressed", self, "paused_pressed")
 	get_node("actions").connect("item_pressed", self, "actions_index_pressed")
 
 	get_node("buildings").connect("pressed", self, "buildings_pressed")
@@ -30,6 +31,18 @@ func _ready():
 
 	toggle_action_visible(false)
 	toggle_buildings_visible(false)
+
+func _input(event):
+	if (event.is_action_pressed("pause")):
+		paused_pressed()
+
+func paused_pressed():
+	if (!get_tree().is_paused()):
+		get_tree().set_pause(true)
+		get_node("pause_menu").visible = true
+	else:
+		get_node("pause_menu").visible = false
+		get_tree().set_pause(false)
 
 func _gui_input(event):
 	if (event.is_action_released("left_click")):
