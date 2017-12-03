@@ -2,11 +2,8 @@ extends Button
 
 signal item_pressed
 
-
 func _ready():
-	#get_node("remove").connect("pressed", self, "remove_pressed")
-	pass
+	get_node("algae_gen").connect("pressed", self, "algae_pressed")
 
-func remove_pressed():
-	#emit_signal("item_pressed", "Clear Tile")
-	pass
+func algae_pressed():
+	emit_signal("item_pressed", "Algae Genorator")

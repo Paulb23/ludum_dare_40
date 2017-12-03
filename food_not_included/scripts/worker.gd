@@ -5,6 +5,7 @@ var Job = preload("res://Job.gd")
 signal request_job
 signal request_path
 signal hit_tile
+signal build_tile
 signal dead
 signal eat
 
@@ -28,6 +29,11 @@ var mining_dmg = 10
 var mining_timer
 var can_mine = true;
 
+var building = false
+var building_speed = 10
+var building_timer
+var can_build = true;
+
 var eating = false
 var eating_wait_timer
 var eating_timer
@@ -40,6 +46,9 @@ var name = "worker"
 func _ready():
 	mining_timer = get_node("mining_timer")
 	mining_timer.connect("timeout", self, "set_can_mine")
+
+	building_timer = get_node("building_timer")
+	building_timer.connect("timeout", self, "set_can_build")
 
 	eating_timer = get_node("eating_timer")
 	eating_timer.connect("timeout", self, "finished_eating")
@@ -90,6 +99,26 @@ func _physics_process(delta):
 					emit_signal("hit_tile", self, assigned_job.pos, mining_dmg);
 					can_mine = false
 					mining_timer.start()
+					if (assigned_job.pos.y * tile_size < self.get_position().y):
+						get_node("sprite").play("mine_up")
+					else:
+						get_node("sprite").play("mine_down")
+			Job.Type.BUILD:
+				if (!at_target):
+					move_to_position(assigned_job.pos)
+					if (at_target && self.get_position().distance_to(assigned_job.pos * tile_size) < speed):
+						print(name + " Starting to build")
+						building = true
+					elif(at_target):
+						print(name + " job is out of reach, quitting..")
+						has_job = false
+				if (building && can_build):
+					if (!get_node("mining").playing):
+						get_node("mining").play()
+					print(name + " attempts to build tile " + String(assigned_job.pos))
+					emit_signal("build_tile", self, assigned_job.pos, building_speed);
+					can_build = false
+					building_timer.start()
 					if (assigned_job.pos.y * tile_size < self.get_position().y):
 						get_node("sprite").play("mine_up")
 					else:
@@ -153,6 +182,9 @@ func assign_path(new_path):
 func set_can_mine():
 	can_mine = true
 
+func set_can_build():
+	can_build = true
+
 func set_can_eat():
 	print(name + " is going to eat!")
 	at_target = false
@@ -175,6 +207,10 @@ func finished_eating():
 func notify_tile_removed():
 	match assigned_job.type:
 		Job.Type.MINE:
-			print(name + " removed a tile ")
+			print(name + " removed a tile")
 			mining = false
+			has_job = false;
+		Job.Type.BUILD:
+			print(name + " finished building")
+			building = false
 			has_job = false;

@@ -37,7 +37,6 @@ autostart = true
 
 frames = SubResource( 1 )
 animation = "default"
-frame = 2
 playing = true
 
 [node name="spawn_sound" type="AudioStreamPlayer2D" parent="."]

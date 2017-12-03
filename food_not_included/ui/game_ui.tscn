@@ -1,12 +1,14 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://ui/game_ui.gd" type="Script" id=1]
 [ext_resource path="res://ui/actions.gd" type="Script" id=2]
 [ext_resource path="res://ui/buttons/remove_icon.png" type="Texture" id=3]
 [ext_resource path="res://ui/buidlings.gd" type="Script" id=4]
-[ext_resource path="res://ui/stone_icon.png" type="Texture" id=5]
-[ext_resource path="res://ui/food_icon.png" type="Texture" id=6]
-[ext_resource path="res://ui/population_icon.png" type="Texture" id=7]
+[ext_resource path="res://rooms/algae_gen_icon.png" type="Texture" id=5]
+[ext_resource path="res://ui/stone_icon.png" type="Texture" id=6]
+[ext_resource path="res://ui/food_icon.png" type="Texture" id=7]
+[ext_resource path="res://ui/plant_icon.png" type="Texture" id=8]
+[ext_resource path="res://ui/population_icon.png" type="Texture" id=9]
 
 [node name="game_ui" type="Control"]
 
@@ -14,9 +16,8 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 1.0
-margin_right = 801.0
-margin_bottom = 600.0
+margin_right = 1023.0
+margin_bottom = 576.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -25,7 +26,24 @@ size_flags_vertical = 1
 script = ExtResource( 1 )
 _sections_unfolded = [ "Rect", "Transform" ]
 
+[node name="Panel" type="Panel" parent="."]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 95.0
+margin_bottom = 148.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+
 [node name="mouse_icon" type="Sprite" parent="."]
+
+centered = false
+_sections_unfolded = [ "Offset" ]
 
 [node name="actions" type="Button" parent="."]
 
@@ -48,7 +66,6 @@ group = null
 text = "Actions"
 flat = false
 script = ExtResource( 2 )
-_sections_unfolded = [ "Rect" ]
 
 [node name="remove" type="Button" parent="actions"]
 
@@ -71,6 +88,7 @@ group = null
 text = "Clear Tile"
 icon = ExtResource( 3 )
 flat = false
+_sections_unfolded = [ "Anchor", "Margin" ]
 
 [node name="buildings" type="Button" parent="."]
 
@@ -96,10 +114,32 @@ flat = false
 script = ExtResource( 4 )
 _sections_unfolded = [ "Rect" ]
 
+[node name="algae_gen" type="Button" parent="buildings"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = -31.0
+margin_right = 144.0
+margin_bottom = -1.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Algae Genorator"
+icon = ExtResource( 5 )
+flat = false
+
 [node name="stone_sprite" type="Sprite" parent="."]
 
-position = Vector2( 35.4254, 35.4859 )
-texture = ExtResource( 5 )
+position = Vector2( 24.2058, 27.4913 )
+texture = ExtResource( 6 )
 
 [node name="stone_count" type="Label" parent="stone_sprite"]
 
@@ -123,8 +163,8 @@ _sections_unfolded = [ "Anchor", "Margin" ]
 
 [node name="food_sprite" type="Sprite" parent="."]
 
-position = Vector2( 35.4254, 67.54 )
-texture = ExtResource( 6 )
+position = Vector2( 24.0718, 60.424 )
+texture = ExtResource( 7 )
 
 [node name="food_count" type="Label" parent="food_sprite"]
 
@@ -146,10 +186,35 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Margin" ]
 
+[node name="plant_sprite" type="Sprite" parent="."]
+
+position = Vector2( 23.9995, 89.544 )
+texture = ExtResource( 8 )
+
+[node name="plant_count" type="Label" parent="plant_sprite"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+margin_left = 17.0
+margin_top = -6.0
+margin_right = 7.0
+margin_bottom = 8.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+size_flags_horizontal = 1
+size_flags_vertical = 4
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Anchor", "Margin" ]
+
 [node name="population_sprite" type="Sprite" parent="."]
 
-position = Vector2( 35.0932, 102.251 )
-texture = ExtResource( 7 )
+position = Vector2( 23.9991, 120.77 )
+texture = ExtResource( 9 )
 
 [node name="population_count" type="Label" parent="population_sprite"]
 

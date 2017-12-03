@@ -7,10 +7,13 @@ var noise = preload("res://libs/softnoise.gd")
 var Portal = preload("res://rooms/home_portal.tscn")
 var Worker = preload("res://wokers/worker.tscn")
 
+var Algae_gen = preload("res://rooms/algae_gen.tscn")
+
 var soft_noise
 
 var food_count = 100
 var stone_count = 100
+var plant_count = 0
 var pop = 0
 
 var tile_size = 24
@@ -59,6 +62,7 @@ func create_worker():
 	worker.connect("request_job", self, "add_wating_worker")
 	worker.connect("request_path", self, "get_path")
 	worker.connect("hit_tile", self, "hit_tile")
+	worker.connect("build_tile", self, "build_tile")
 	worker.connect("eat", self, "worker_eat")
 	worker.connect("dead", self, "worker_death")
 	workers.add_child(worker)
@@ -109,10 +113,28 @@ func hit_tile(worker, tile, dmg):
 		world.set_meta(String(tile), String(int(world.get_meta(String(tile))) - dmg))
 		print(worker.name + " hits tile " + String(tile) + " for " + String(dmg))
 		if (int(world.get_meta(String(tile))) <= 0):
-			stone_count += 50
+			if (tile_set.tile_get_name(tile_id).find("algae") > -1):
+				stone_count += 10
+				plant_count += 2
+			else:
+				stone_count += 20
 			update_ui()
 			worker.notify_tile_removed()
 			world.set_cell(tile.x, tile.y, 0)
+	else:
+		worker.notify_tile_removed()
+
+func build_tile(worker, tile, speed):
+	var tile_id  = world.get_cell(tile.x, tile.y)
+	if (tile_id == -1):
+		if (!world.has_meta(String(tile))):
+			world.set_meta(String(tile), String(1))
+		world.set_meta(String(tile), String(int(world.get_meta(String(tile))) + speed))
+		print(worker.name + " build tile " + String(tile) + " for " + String(speed))
+		if (int(world.get_meta(String(tile))) >= 100):
+			worker.assigned_job.build.built = true
+			update_ui()
+			worker.notify_tile_removed()
 	else:
 		worker.notify_tile_removed()
 
@@ -120,6 +142,7 @@ func update_ui():
 	ui.stone_count = stone_count
 	ui.food_count = food_count
 	ui.population = pop
+	ui.plant_count = plant_count
 	ui.update_ui()
 
 func use_tool(tile):
@@ -127,6 +150,45 @@ func use_tool(tile):
 		UI.Tool.REMOVE:
 			var job = Job.new("Mining " + String(tile), Job.Type.MINE, tile)
 			create_job(job)
+		UI.Tool.BUILD_ALGAE_GEN:
+			var size = Vector2(3,2)
+			var can_build = true
+			for x in range(tile.x,  tile.x + size.x):
+				for y in range(tile.y,  tile.y + size.y):
+					var tile_id  = world.get_cell(x, y)
+					if (is_walkable_tile(tile_id)):
+						if (world.has_meta(String(tile))):
+							if (int(world.get_meta(String(tile))) < 0):
+								can_build = false
+								break
+					else:
+						can_build = false
+						break
+
+			if (can_build):
+				for x in range(tile.x,  tile.x + size.x):
+					for y in range(tile.y,  tile.y + size.y):
+						world.set_meta(String(tile), String(1))
+						world.set_cell(x, y, -1)
+				var new_build = create_building(UI.Tool.BUILD_ALGAE_GEN, tile)
+				var job = Job.new("Building Algae Genorator at " + String(tile), Job.Type.BUILD, tile, new_build)
+				create_job(job)
+			else:
+				pass
+
+func create_building(type, tile):
+	var new_build = null
+	match type:
+		UI.Tool.BUILD_ALGAE_GEN:
+			print("Creating new Algae Genorator")
+			var size = Vector2(1.5,1)
+			tile.x += size.x
+			tile.y += size.y
+			new_build = Algae_gen.instance()
+			new_build.set_position(tile * tile_size)
+			buildings.add_child(new_build)
+	update_ui()
+	return new_build
 
 func worker_eat(worker, amount):
 	if food_count < amount:
@@ -159,7 +221,10 @@ func create_world():
 			if (tile_id < 0):
 				tile_id = tile_set.find_tile_by_name("ground_normal")
 			else :
-				tile_id = 7
+				if (tile_id > 0.5):
+					tile_id = tile_set.find_tile_by_name("un_mined")
+				else:
+					tile_id = tile_set.find_tile_by_name("un_mined_algae")
 			world.set_cell(x, y, tile_id)
 
 	var center = world_size / 2
