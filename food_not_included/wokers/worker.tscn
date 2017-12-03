@@ -1,17 +1,45 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/worker.gd" type="Script" id=1]
-[ext_resource path="res://sprites/worker_normal.png" type="Texture" id=2]
-[ext_resource path="res://sfx/walking.ogg" type="AudioStream" id=3]
+[ext_resource path="res://sprites/worker_normal2.png" type="Texture" id=2]
+[ext_resource path="res://sprites/worker_normal1.png" type="Texture" id=3]
+[ext_resource path="res://sprites/worker_normal6.png" type="Texture" id=4]
+[ext_resource path="res://sprites/worker_normal7.png" type="Texture" id=5]
+[ext_resource path="res://sprites/worker_normal8.png" type="Texture" id=6]
+[ext_resource path="res://sprites/worker_normal3.png" type="Texture" id=7]
+[ext_resource path="res://sprites/worker_normal4.png" type="Texture" id=8]
+[ext_resource path="res://sprites/worker_normal5.png" type="Texture" id=9]
+[ext_resource path="res://sfx/walking.ogg" type="AudioStream" id=10]
+
+[sub_resource type="SpriteFrames" id=1]
+
+animations = [ {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "up",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "down",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "mine_down",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "mine_up",
+"speed": 5.0
+} ]
+_sections_unfolded = [ "Resource" ]
 
 [node name="worker" type="Node2D"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform", "Z" ]
-
-[node name="sprite" type="Sprite" parent="."]
-
-texture = ExtResource( 2 )
 
 [node name="mining_timer" type="Timer" parent="."]
 
@@ -20,9 +48,14 @@ wait_time = 1.0
 one_shot = true
 autostart = false
 
+[node name="sprite" type="AnimatedSprite" parent="."]
+
+frames = SubResource( 1 )
+animation = "down"
+
 [node name="walk" type="AudioStreamPlayer2D" parent="."]
 
-stream = ExtResource( 3 )
+stream = ExtResource( 10 )
 volume_db = 0.0
 autoplay = false
 max_distance = 2000.0
@@ -32,7 +65,7 @@ area_mask = 1
 
 [node name="mining" type="AudioStreamPlayer2D" parent="."]
 
-stream = ExtResource( 3 )
+stream = ExtResource( 10 )
 volume_db = 5.0
 autoplay = false
 max_distance = 2000.0

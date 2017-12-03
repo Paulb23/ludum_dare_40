@@ -62,7 +62,12 @@ func _physics_process(delta):
 					emit_signal("hit_tile", self, assigned_job.pos, mining_dmg);
 					can_mine = false
 					mining_timer.start()
-
+					if (assigned_job.pos.y * tile_size < self.get_position().y):
+						get_node("sprite").play("mine_up")
+					else:
+						get_node("sprite").play("mine_down")
+	else:
+		get_node("sprite").play("down")
 
 func move_to_position(target):
 	if (!has_path && !waiting_for_path):
@@ -97,6 +102,11 @@ func move_to_position(target):
 			var new_x_pos = x_move + self.get_position().x
 			var new_y_pos = y_move + self.get_position().y
 			target_pos = Vector2(new_x_pos, new_y_pos)
+		print(target_pos.y , " ",self.get_position().y)
+		if (target_pos.y + 0.5 < self.get_position().y):
+			get_node("sprite").play("up")
+		else:
+			get_node("sprite").play("down")
 		set_position(target_pos)
 
 func assign_job(new_job):
