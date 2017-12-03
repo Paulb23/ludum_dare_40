@@ -13,6 +13,7 @@ func _ready():
 func create_worker():
 	print("Requesting new worker")
 	emit_signal("create_worker")
+	get_node("spawn_sound").play()
 	workers_created += 1
 	worker_timer.set_wait_time(rand_range(90, 300))
 

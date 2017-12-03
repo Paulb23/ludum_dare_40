@@ -56,6 +56,8 @@ func _physics_process(delta):
 						print(name + " job is out of reach, quitting..")
 						has_job = false
 				if (mining && can_mine):
+					if (!get_node("mining").playing):
+						get_node("mining").play()
 					print(name + " attempts to hits tile " + String(assigned_job.pos))
 					emit_signal("hit_tile", self, assigned_job.pos, mining_dmg);
 					can_mine = false
@@ -68,6 +70,8 @@ func move_to_position(target):
 		waiting_for_path = true
 		emit_signal("request_path", self, target)
 	if (has_path):
+		if (!get_node("walk").playing):
+			get_node("walk").play()
 		if (path.size() <= 0):
 			has_path = false;
 			at_target = true;

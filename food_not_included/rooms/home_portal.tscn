@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://rooms/home_portal.gd" type="Script" id=1]
 [ext_resource path="res://tiles/portal1.png" type="Texture" id=2]
 [ext_resource path="res://tiles/portal2.png" type="Texture" id=3]
 [ext_resource path="res://tiles/portal3.png" type="Texture" id=4]
 [ext_resource path="res://tiles/portal1_normal1.png" type="Texture" id=5]
+[ext_resource path="res://sfx/spawn.ogg" type="AudioStream" id=6]
 
 [sub_resource type="SpriteFrames" id=1]
 
@@ -36,6 +37,17 @@ autostart = true
 
 frames = SubResource( 1 )
 animation = "default"
+frame = 2
 playing = true
+
+[node name="spawn_sound" type="AudioStreamPlayer2D" parent="."]
+
+stream = ExtResource( 6 )
+volume_db = 0.0
+autoplay = false
+max_distance = 2000.0
+attenuation = 1.0
+bus = "Master"
+area_mask = 1
 
 
