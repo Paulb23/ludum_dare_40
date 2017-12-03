@@ -46,7 +46,6 @@ func _ready():
 	get_node("camera").focus_center()
 	ui = get_node("camera/game_ui")
 
-
 func create_worker():
 	print("Creating new worker")
 	var worker = Worker.instance()
@@ -59,7 +58,7 @@ func create_worker():
 
 func process_waiting_workers():
 	var i = waiting_wokers.size() - 1
-	while (i > 0):
+	while (i > -1):
 		var job = get_job()
 		if (job):
 			print("assiging " + waiting_wokers[i].name + " to " + job.name)
