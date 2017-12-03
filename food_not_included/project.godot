@@ -11,7 +11,7 @@ config_version=3
 [application]
 
 config/name="Food Not Included"
-run/main_scene="res://levels/main_level.tscn"
+run/main_scene="res://ui/main_menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]

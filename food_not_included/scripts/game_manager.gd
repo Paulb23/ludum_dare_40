@@ -12,13 +12,13 @@ var Algae_to_food_gen = preload("res://rooms/algae_to_food_gen.tscn")
 
 var soft_noise
 
-var food_count = 100
+var food_count = 40
 var stone_count = 100
 var plant_count = 0
 var pop = 0
 var tile_size = 24
 
-var world_size = 100
+var world_size = 1000
 
 var world
 var tile_set
