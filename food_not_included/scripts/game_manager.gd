@@ -18,6 +18,11 @@ var plant_count = 0
 var pop = 0
 var tile_size = 24
 
+var max_pop = 0
+var stone_collected = 0
+var food_collected = 0
+var algea_collected = 0
+
 var world_size = 1000
 
 var world
@@ -67,6 +72,8 @@ func create_worker():
 	worker.connect("dead", self, "worker_death")
 	workers.add_child(worker)
 	pop += 1
+	if (pop > max_pop):
+		max_pop = pop
 	update_ui()
 
 func process_waiting_workers():
@@ -115,9 +122,12 @@ func hit_tile(worker, tile, dmg):
 		if (int(world.get_meta(String(tile))) <= 0):
 			if (tile_set.tile_get_name(tile_id).find("algae") > -1):
 				stone_count += 10
+				stone_collected += 10
 				plant_count += 2
+				algea_collected += 2
 			else:
 				stone_count += 20
+				stone_collected += 20
 			update_ui()
 			worker.notify_tile_removed()
 			world.set_cell(tile.x, tile.y, 0)
@@ -151,6 +161,7 @@ func build_tile(worker, tile, speed):
 func algae_created(amount):
 	print(amount, " algae created!")
 	plant_count += amount
+	algea_collected += amount
 	update_ui()
 
 func collect_algae(building, amount):
@@ -166,6 +177,7 @@ func collect_algae(building, amount):
 func food_created(amount):
 	print(amount, " food created!")
 	food_count += amount
+	food_collected += amount
 	update_ui()
 
 func update_ui():
@@ -282,6 +294,10 @@ func worker_death(worker):
 	pop -= 1
 	update_ui()
 	if (pop <= 0):
+		Globals.set("max_pop", max_pop)
+		Globals.set("stone_collected", stone_collected)
+		Globals.set("food_collected", food_collected)
+		Globals.set("algea_collected", algea_collected)
 		Globals.set_scene("res://ui/game_over.tscn")
 
 func is_walkable_tile(tile_id):

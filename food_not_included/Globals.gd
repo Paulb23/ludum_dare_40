@@ -4,6 +4,8 @@ const screen_width = 1024
 const screen_height = 576
 const tile_size = 24
 
+var varibles = {}
+
 var currernt_scene = null
 
 func _ready():
@@ -25,3 +27,12 @@ func set_globals():
 	Globals.set("SCREEN_WIDTH", screen_width)
 	Globals.set("SCREEN_HEIGHT", screen_height)
 	Globals.set("TILE_SIZE", tile_size)
+
+func set(name, value):
+	varibles[name] = value
+
+func get(name):
+	if varibles.has(name):
+		return varibles[name]
+	else:
+		return ""
