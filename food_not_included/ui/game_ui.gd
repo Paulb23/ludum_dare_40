@@ -3,7 +3,8 @@ extends Control
 enum Tool {
 	NONE,
 	REMOVE,
-	BUILD_ALGAE_GEN
+	BUILD_ALGAE_GEN,
+	BUILD_ALGAE_TO_FOOD_GEN
 }
 
 signal use_tool
@@ -79,6 +80,8 @@ func buildings_index_pressed(name):
 	toggle_buildings_visible(false)
 	if (name == "Algae Genorator"):
 		place_algae_gen()
+	if (name == "Algae to food Genorator"):
+		place_algae_to_food_gen()
 
 func remove_tiles():
 	current_selected = Tool.REMOVE
@@ -87,6 +90,10 @@ func remove_tiles():
 func place_algae_gen():
 	current_selected = Tool.BUILD_ALGAE_GEN
 	mouse_icon.texture = load("res://rooms/algae_gen_active.png")
+
+func place_algae_to_food_gen():
+	current_selected = Tool.BUILD_ALGAE_TO_FOOD_GEN
+	mouse_icon.texture = load("res://rooms/algae_to_food_gen_active.png")
 
 func update_ui():
 	get_node("stone_sprite/stone_count").text = String(stone_count)

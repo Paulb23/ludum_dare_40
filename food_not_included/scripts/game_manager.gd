@@ -8,6 +8,7 @@ var Portal = preload("res://rooms/home_portal.tscn")
 var Worker = preload("res://wokers/worker.tscn")
 
 var Algae_gen = preload("res://rooms/algae_gen.tscn")
+var Algae_to_food_gen = preload("res://rooms/algae_to_food_gen.tscn")
 
 var soft_noise
 
@@ -15,7 +16,6 @@ var food_count = 100
 var stone_count = 100
 var plant_count = 0
 var pop = 0
-
 var tile_size = 24
 
 var world_size = 100
@@ -153,6 +153,21 @@ func algae_created(amount):
 	plant_count += amount
 	update_ui()
 
+func collect_algae(building, amount):
+	print(building.get_name(), " is requesting ", amount, " algae" )
+	if plant_count < amount:
+		print("not enough algae for ", building.get_name(), " giving 0" )
+		building.give_algae(0)
+	else:
+		building.give_algae(amount)
+		plant_count -= amount
+	update_ui()
+
+func food_created(amount):
+	print(amount, " food created!")
+	food_count += amount
+	update_ui()
+
 func update_ui():
 	ui.stone_count = stone_count
 	ui.food_count = food_count
@@ -172,17 +187,7 @@ func use_tool(tile):
 				can_build = false
 
 			if (can_build):
-				for x in range(tile.x,  tile.x + size.x):
-					for y in range(tile.y,  tile.y + size.y):
-						var tile_id  = world.get_cell(x, y)
-						if (is_walkable_tile(tile_id)):
-							if (world.has_meta(String(tile))):
-								if (int(world.get_meta(String(tile))) < 0):
-									can_build = false
-									break
-						else:
-							can_build = false
-							break
+				can_build = is_free_space(tile, size)
 
 			if (can_build):
 				stone_count -= 50
@@ -196,6 +201,42 @@ func use_tool(tile):
 				create_job(job)
 			else:
 				pass
+		UI.Tool.BUILD_ALGAE_TO_FOOD_GEN:
+			var size = Vector2(2,2)
+			var can_build = true
+			if (stone_count < 75 || plant_count < 20):
+				can_build = false
+
+			if (can_build):
+				can_build = is_free_space(tile, size)
+
+			if (can_build):
+				stone_count -= 75
+				plant_count -= 20
+				for x in range(tile.x,  tile.x + size.x):
+					for y in range(tile.y,  tile.y + size.y):
+						world.set_meta(String(tile), String(1))
+						world.set_cell(x, y, -1)
+				var new_build = create_building(UI.Tool.BUILD_ALGAE_TO_FOOD_GEN, tile)
+				var job = Job.new("Building Algae  To Food Genorator at " + String(tile), Job.Type.BUILD, tile, new_build)
+				create_job(job)
+			else:
+				pass
+
+func is_free_space(tile, size):
+	var is_free = true
+	for x in range(tile.x,  tile.x + size.x):
+		for y in range(tile.y,  tile.y + size.y):
+			var tile_id  = world.get_cell(x, y)
+			if (is_walkable_tile(tile_id)):
+				if (world.has_meta(String(tile))):
+					if (int(world.get_meta(String(tile))) < 0):
+						is_free = false
+						break
+			else:
+				is_free = false
+				break
+	return is_free
 
 func create_building(type, tile):
 	var new_build = null
@@ -209,6 +250,16 @@ func create_building(type, tile):
 			new_build.set_position(tile * tile_size)
 			buildings.add_child(new_build)
 			new_build.connect("algae_created", self, "algae_created")
+		UI.Tool.BUILD_ALGAE_TO_FOOD_GEN:
+			print("Creating new Algae TO Food Genorator")
+			var size = Vector2(1,1)
+			tile.x += size.x
+			tile.y += size.y
+			new_build = Algae_to_food_gen.instance()
+			new_build.set_position(tile * tile_size)
+			buildings.add_child(new_build)
+			new_build.connect("request_algae", self, "collect_algae")
+			new_build.connect("food_created", self, "food_created")
 	update_ui()
 	return new_build
 
