@@ -48,6 +48,20 @@ wait_time = 1.0
 one_shot = true
 autostart = false
 
+[node name="eating_timer" type="Timer" parent="."]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = true
+autostart = false
+
+[node name="eating_wait_timer" type="Timer" parent="."]
+
+process_mode = 1
+wait_time = 200.0
+one_shot = true
+autostart = true
+
 [node name="sprite" type="AnimatedSprite" parent="."]
 
 frames = SubResource( 1 )

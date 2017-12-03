@@ -9,7 +9,8 @@ var Worker = preload("res://wokers/worker.tscn")
 
 var soft_noise
 
-var stone_count = 0
+var food_count = 100
+var stone_count = 100
 
 var tile_size = 24
 
@@ -46,15 +47,18 @@ func _ready():
 	get_node("camera").focus_center()
 	ui = get_node("camera/game_ui")
 	ui.connect("use_tool", self, "use_tool")
+	update_ui()
 
 func create_worker():
 	print("Creating new worker")
 	var worker = Worker.instance()
 	worker.name = Names.get_name()
+	worker.portal_tile = Vector2(world_size / 2, world_size / 2)
 	worker.set_position(portal.get_position() - Vector2(-tile_size * 2, -tile_size * 2))
 	worker.connect("request_job", self, "add_wating_worker")
 	worker.connect("request_path", self, "get_path")
 	worker.connect("hit_tile", self, "hit_tile")
+	worker.connect("eat", self, "worker_eat")
 	workers.add_child(worker)
 
 func process_waiting_workers():
@@ -101,16 +105,33 @@ func hit_tile(worker, tile, dmg):
 		world.set_meta(String(tile), String(int(world.get_meta(String(tile))) - dmg))
 		print(worker.name + " hits tile " + String(tile) + " for " + String(dmg))
 		if (int(world.get_meta(String(tile))) <= 0):
+			stone_count += 50
+			update_ui()
 			worker.notify_tile_removed()
 			world.set_cell(tile.x, tile.y, 0)
 	else:
 		worker.notify_tile_removed()
+
+func update_ui():
+	ui.stone_count = stone_count
+	ui.food_count = food_count
+	ui.update_ui()
 
 func use_tool(tile):
 	match ui.current_selected:
 		UI.Tool.REMOVE:
 			var job = Job.new("Mining " + String(tile), Job.Type.MINE, tile)
 			create_job(job)
+
+func worker_eat(worker, amount):
+	if food_count < amount:
+		print(worker.name + " does not have enough food!")
+		worker.full = false
+	else:
+		print(worker.name + " is enjoying their meal")
+		worker.full = true
+		food_count -= amount
+	update_ui()
 
 func is_walkable_tile(tile_id):
 	return (tile_set.tile_get_name(tile_id).find("ground") > -1)

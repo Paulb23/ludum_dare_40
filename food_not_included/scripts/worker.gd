@@ -5,9 +5,11 @@ var Job = preload("res://Job.gd")
 signal request_job
 signal request_path
 signal hit_tile
+signal eat
 
 var delta
 var tile_size = 24
+var portal_tile
 
 var waiting_for_job = false
 var has_job = false
@@ -25,14 +27,33 @@ var mining_dmg = 10
 var mining_timer
 var can_mine = true;
 
+var eating = false
+var eating_wait_timer
+var eating_timer
+var full = true
+
 var name = "worker"
 
 func _ready():
 	mining_timer = get_node("mining_timer")
 	mining_timer.connect("timeout", self, "set_can_mine")
 
+	eating_timer = get_node("eating_timer")
+	eating_timer.connect("timeout", self, "finished_eating")
+
+	eating_wait_timer = get_node("eating_wait_timer")
+	eating_wait_timer.connect("timeout", self, "set_can_eat")
+
 func _physics_process(delta):
 	self.delta = delta
+
+	if (eating):
+		if (!at_target):
+			move_to_position(portal_tile)
+		elif (eating_timer.is_stopped()):
+			emit_signal("eat", self, 10)
+			eating_timer.start()
+		return
 
 	if (!has_job && !waiting_for_job):
 		print(name + " is requesting a new job")
@@ -124,6 +145,17 @@ func assign_path(new_path):
 
 func set_can_mine():
 	can_mine = true
+
+func set_can_eat():
+	print(name + " is going to eat!")
+	at_target = false
+	eating = true
+
+func finished_eating():
+	if (full):
+		at_target = false
+		eating = false
+		eating_wait_timer.start()
 
 func notify_tile_removed():
 	match assigned_job.type:
