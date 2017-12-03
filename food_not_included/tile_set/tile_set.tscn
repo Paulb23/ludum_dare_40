@@ -10,26 +10,11 @@
 [ext_resource path="res://tiles/wall_corner_top_right.png" type="Texture" id=8]
 [ext_resource path="res://tiles/wall_corner_top_left.png" type="Texture" id=9]
 
-[sub_resource type="NavigationPolygon" id=7]
+[sub_resource type="NavigationPolygon" id=1]
 
 vertices = PoolVector2Array( 0, 0, 24, 0, 24, 24, 0, 24 )
 polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 outlines = [ PoolVector2Array( 0, 0, 24, 0, 24, 24, 0, 24 ) ]
-
-[sub_resource type="RectangleShape2D" id=6]
-
-custom_solver_bias = 0.0
-extents = Vector2( 12, 12 )
-
-[sub_resource type="RectangleShape2D" id=5]
-
-custom_solver_bias = 0.0
-extents = Vector2( 12, 12 )
-
-[sub_resource type="RectangleShape2D" id=1]
-
-custom_solver_bias = 0.0
-extents = Vector2( 12, 12 )
 
 [sub_resource type="RectangleShape2D" id=2]
 
@@ -46,6 +31,21 @@ extents = Vector2( 12, 12 )
 custom_solver_bias = 0.0
 extents = Vector2( 12, 12 )
 
+[sub_resource type="RectangleShape2D" id=5]
+
+custom_solver_bias = 0.0
+extents = Vector2( 12, 12 )
+
+[sub_resource type="RectangleShape2D" id=6]
+
+custom_solver_bias = 0.0
+extents = Vector2( 12, 12 )
+
+[sub_resource type="RectangleShape2D" id=7]
+
+custom_solver_bias = 0.0
+extents = Vector2( 12, 12 )
+
 [node name="tiles" type="Node2D"]
 
 [node name="ground_normal" type="Sprite" parent="."]
@@ -57,7 +57,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="poly" type="NavigationPolygonInstance" parent="ground_normal"]
 
-navpoly = SubResource( 7 )
+navpoly = SubResource( 1 )
 enabled = true
 _sections_unfolded = [ "Transform" ]
 
@@ -83,7 +83,7 @@ _sections_unfolded = [ "Transform", "Z" ]
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall_top/StaticBody2D"]
 
 position = Vector2( 12, 12 )
-shape = SubResource( 6 )
+shape = SubResource( 2 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="un_mined" type="Sprite" parent="."]
@@ -107,7 +107,7 @@ _sections_unfolded = [ "Transform", "Z" ]
 [node name="CollisionShape2D" type="CollisionShape2D" parent="un_mined/StaticBody2D"]
 
 position = Vector2( 12, 12 )
-shape = SubResource( 6 )
+shape = SubResource( 2 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="un_mined_algae" type="Sprite" parent="."]
@@ -131,7 +131,7 @@ _sections_unfolded = [ "Transform", "Z" ]
 [node name="CollisionShape2D" type="CollisionShape2D" parent="un_mined_algae/StaticBody2D"]
 
 position = Vector2( 12, 12 )
-shape = SubResource( 6 )
+shape = SubResource( 2 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="wall_side" type="Sprite" parent="."]
@@ -155,7 +155,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall_side/StaticBody2D"]
 
 position = Vector2( 12, 12 )
-shape = SubResource( 5 )
+shape = SubResource( 3 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="wall_corner_bottom_left" type="Sprite" parent="."]
@@ -179,7 +179,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall_corner_bottom_left/StaticBody2D"]
 
 position = Vector2( 12, 12 )
-shape = SubResource( 1 )
+shape = SubResource( 4 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="wall_corner_bottom_right" type="Sprite" parent="."]
@@ -204,7 +204,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall_corner_bottom_right/StaticBody2D"]
 
 position = Vector2( 12, 12 )
-shape = SubResource( 2 )
+shape = SubResource( 5 )
 _sections_unfolded = [ "Transform" ]
 
 [node name="wall_corner_top_right2" type="Sprite" parent="."]
@@ -229,7 +229,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall_corner_top_right2/StaticBody2D"]
 
 position = Vector2( 12, 12 )
-shape = SubResource( 3 )
+shape = SubResource( 6 )
 _sections_unfolded = [ "Transform", "Z" ]
 
 [node name="wall_corner_top_left" type="Sprite" parent="."]
@@ -253,7 +253,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="CollisionShape2D" type="CollisionShape2D" parent="wall_corner_top_left/StaticBody2D"]
 
 position = Vector2( 12, 12 )
-shape = SubResource( 4 )
+shape = SubResource( 7 )
 _sections_unfolded = [ "Transform" ]
 
 

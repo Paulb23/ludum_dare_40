@@ -23,7 +23,7 @@ var stone_collected = 0
 var food_collected = 0
 var algea_collected = 0
 
-var world_size = 500
+var world_size = 300
 
 var world
 var tile_set
@@ -306,11 +306,12 @@ func is_walkable_tile(tile_id):
 func create_world():
 	for x in range(0, world_size):
 		for y in range(0, world_size):
-			var tile_id = soft_noise.value_noise2d(x, y)
+			var tile_id = soft_noise.openSimplex2D(x, y)
+			print(tile_id)
 			if (tile_id < 0):
 				tile_id = tile_set.find_tile_by_name("ground_normal")
 			else :
-				if (tile_id > 0.5):
+				if (tile_id > 0.2):
 					tile_id = tile_set.find_tile_by_name("un_mined")
 				else:
 					tile_id = tile_set.find_tile_by_name("un_mined_algae")

@@ -147,11 +147,11 @@ class SoftNoise:
 			perm.append(i)
 		for i in range(256):
 			var j
-			if _seed == 0:
-				randomize()
-				j = randi() % 256
-			else:
-				j = int(simple_noise1d(_seed) * 32767) % 256
+			#if _seed == 0:
+			randomize()
+			j = randi() % 256
+		#	else:
+		#		j = int(simple_noise1d(_seed) * 32767) % 256
 			var nSwap = perm[i]
 			perm[i]  = perm[j]
 			perm[j]  = nSwap
@@ -161,8 +161,8 @@ class SoftNoise:
 		#	gx.append(float(randf())/(32767/2) - 1.0)
 		#	gy.append(float(randf())/(32767/2) - 1.0)
 		for i in range(256):
-    			gx.append(2.0 * randf() - 1.0)
-    			gy.append(2.0 * randf() - 1.0)
+			gx.append(2.0 * randf() - 1.0)
+			gy.append(2.0 * randf() - 1.0)
 
 	func perlin_noise2d(var x, var y):
 		#Compute the integer positions of the four surrounding points
@@ -2240,3 +2240,4 @@ class SoftNoise:
 	func extrapolate4d(var xsb, var ysb, var zsb, var wsb, var dx, var dy, var dz, var dw):
 		var index = perm[(perm[(perm[(perm[xsb & 0xFF] + ysb) & 0xFF] + zsb) & 0xFF] + wsb) & 0xFF] & 0xFC
 		return gradients4D[index] * dx + gradients4D[index + 1] * dy + gradients4D[index + 2] * dz + gradients4D[index + 3] * dw
+

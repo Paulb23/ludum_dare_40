@@ -55,13 +55,11 @@ func _gui_input(event):
 		mouse_icon.texture = null
 		return
 
-	## offset dur ot camera todo fix...
+	## offset due to camera todo fix...
 	if (event is InputEventMouseMotion):
 		var cam_pos = get_parent().position
-		var tile = Vector2(int(get_position().x + event.position.x) / tile_size, int(event.position.y) / tile_size)
+		var tile = Vector2(int(cam_pos.x + (event.position.x - cam_pos.x)) / tile_size, int(event.position.y) / tile_size)
 		tile *= tile_size
-		tile.x += (tile_size / 2)
-		tile.y += tile_size / 2
 		mouse_icon.set_position(tile)
 
 func actions_pressed():
