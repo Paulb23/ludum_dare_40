@@ -5,6 +5,7 @@ var Job = preload("res://Job.gd")
 signal request_job
 signal request_path
 signal hit_tile
+signal dead
 signal eat
 
 var delta
@@ -31,6 +32,8 @@ var eating = false
 var eating_wait_timer
 var eating_timer
 var full = true
+var dead = false
+var attemps_to_eat = 0
 
 var name = "worker"
 
@@ -47,10 +50,14 @@ func _ready():
 func _physics_process(delta):
 	self.delta = delta
 
+	if dead:
+		return
+
 	if (eating):
 		if (!at_target):
 			move_to_position(portal_tile)
 		elif (eating_timer.is_stopped()):
+			get_node("eating").play()
 			emit_signal("eat", self, 10)
 			eating_timer.start()
 		return
@@ -155,7 +162,15 @@ func finished_eating():
 	if (full):
 		at_target = false
 		eating = false
+		attemps_to_eat = 0
 		eating_wait_timer.start()
+	else:
+		attemps_to_eat += 1
+		if (attemps_to_eat > 3):
+			dead = true
+			print(name + " has starved to death.")
+			emit_signal("dead", self)
+			get_node("death").play()
 
 func notify_tile_removed():
 	match assigned_job.type:

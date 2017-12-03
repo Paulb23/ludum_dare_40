@@ -14,6 +14,7 @@ var tile_size = 24
 
 var stone_count = 0
 var food_count = 0
+var population = 0
 
 func _ready():
 	mouse_icon = get_node("mouse_icon")
@@ -65,3 +66,4 @@ func remove_tiles():
 func update_ui():
 	get_node("stone_sprite/stone_count").text = String(stone_count)
 	get_node("food_sprite/food_count").text = String(food_count)
+	get_node("population_sprite/population_count").text = String(population)

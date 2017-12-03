@@ -11,6 +11,7 @@ var soft_noise
 
 var food_count = 100
 var stone_count = 100
+var pop = 0
 
 var tile_size = 24
 
@@ -59,7 +60,10 @@ func create_worker():
 	worker.connect("request_path", self, "get_path")
 	worker.connect("hit_tile", self, "hit_tile")
 	worker.connect("eat", self, "worker_eat")
+	worker.connect("dead", self, "worker_death")
 	workers.add_child(worker)
+	pop += 1
+	update_ui()
 
 func process_waiting_workers():
 	var i = waiting_wokers.size() - 1
@@ -115,6 +119,7 @@ func hit_tile(worker, tile, dmg):
 func update_ui():
 	ui.stone_count = stone_count
 	ui.food_count = food_count
+	ui.population = pop
 	ui.update_ui()
 
 func use_tool(tile):
@@ -132,6 +137,17 @@ func worker_eat(worker, amount):
 		worker.full = true
 		food_count -= amount
 	update_ui()
+
+func worker_death(worker):
+	if (worker.has_job):
+		create_job(worker.assigned_job)
+	else:
+		waiting_wokers.erase(worker)
+	worker.queue_free()
+	pop -= 1
+	update_ui()
+	if (pop <= 0):
+		Globals.set_scene("res://ui/game_over.tscn")
 
 func is_walkable_tile(tile_id):
 	return (tile_set.tile_get_name(tile_id).find("ground") > -1)

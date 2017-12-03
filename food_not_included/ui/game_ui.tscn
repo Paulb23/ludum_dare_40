@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://ui/game_ui.gd" type="Script" id=1]
 [ext_resource path="res://ui/actions.gd" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://ui/buidlings.gd" type="Script" id=4]
 [ext_resource path="res://ui/stone_icon.png" type="Texture" id=5]
 [ext_resource path="res://ui/food_icon.png" type="Texture" id=6]
+[ext_resource path="res://ui/population_icon.png" type="Texture" id=7]
 
 [node name="game_ui" type="Control"]
 
@@ -126,6 +127,31 @@ position = Vector2( 35.4254, 67.54 )
 texture = ExtResource( 6 )
 
 [node name="food_count" type="Label" parent="food_sprite"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+margin_left = 17.0
+margin_top = -6.0
+margin_right = 7.0
+margin_bottom = 8.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+size_flags_horizontal = 1
+size_flags_vertical = 4
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Anchor", "Margin" ]
+
+[node name="population_sprite" type="Sprite" parent="."]
+
+position = Vector2( 35.0932, 102.251 )
+texture = ExtResource( 7 )
+
+[node name="population_count" type="Label" parent="population_sprite"]
 
 anchor_left = 0.0
 anchor_top = 0.0
