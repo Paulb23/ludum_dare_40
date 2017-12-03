@@ -112,6 +112,7 @@ func _physics_process(delta):
 					elif(at_target):
 						print(name + " job is out of reach, quitting..")
 						has_job = false
+						emit_signal("build_tile", self, assigned_job.pos, building_speed);
 				if (building && can_build):
 					if (!get_node("mining").playing):
 						get_node("mining").play()

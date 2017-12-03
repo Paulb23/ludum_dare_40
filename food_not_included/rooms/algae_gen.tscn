@@ -27,4 +27,11 @@ script = ExtResource( 1 )
 frames = SubResource( 1 )
 animation = "active"
 
+[node name="algae_created_timer" type="Timer" parent="."]
+
+process_mode = 1
+wait_time = 30.0
+one_shot = true
+autostart = false
+
 

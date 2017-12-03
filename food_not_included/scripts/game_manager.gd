@@ -125,6 +125,16 @@ func hit_tile(worker, tile, dmg):
 		worker.notify_tile_removed()
 
 func build_tile(worker, tile, speed):
+	# given up cancel request..
+	if (!worker.has_job):
+		var size = worker.assigned_job.build.get_tile_size()
+		for x in range(tile.x,  tile.x + size.x):
+				for y in range(tile.y,  tile.y + size.y):
+					var tile_id = tile_set.find_tile_by_name("ground_normal")
+					world.set_cell(x, y, tile_id)
+					world.set_meta(String(tile), String(0))
+		worker.assigned_job.build.queue_free()
+		return
 	var tile_id  = world.get_cell(tile.x, tile.y)
 	if (tile_id == -1):
 		if (!world.has_meta(String(tile))):
@@ -132,11 +142,16 @@ func build_tile(worker, tile, speed):
 		world.set_meta(String(tile), String(int(world.get_meta(String(tile))) + speed))
 		print(worker.name + " build tile " + String(tile) + " for " + String(speed))
 		if (int(world.get_meta(String(tile))) >= 100):
-			worker.assigned_job.build.built = true
+			worker.assigned_job.build.built()
 			update_ui()
 			worker.notify_tile_removed()
 	else:
 		worker.notify_tile_removed()
+
+func algae_created(amount):
+	print(amount, " algae created!")
+	plant_count += amount
+	update_ui()
 
 func update_ui():
 	ui.stone_count = stone_count
@@ -153,19 +168,25 @@ func use_tool(tile):
 		UI.Tool.BUILD_ALGAE_GEN:
 			var size = Vector2(3,2)
 			var can_build = true
-			for x in range(tile.x,  tile.x + size.x):
-				for y in range(tile.y,  tile.y + size.y):
-					var tile_id  = world.get_cell(x, y)
-					if (is_walkable_tile(tile_id)):
-						if (world.has_meta(String(tile))):
-							if (int(world.get_meta(String(tile))) < 0):
-								can_build = false
-								break
-					else:
-						can_build = false
-						break
+			if (stone_count < 50 || plant_count < 10):
+				can_build = false
 
 			if (can_build):
+				for x in range(tile.x,  tile.x + size.x):
+					for y in range(tile.y,  tile.y + size.y):
+						var tile_id  = world.get_cell(x, y)
+						if (is_walkable_tile(tile_id)):
+							if (world.has_meta(String(tile))):
+								if (int(world.get_meta(String(tile))) < 0):
+									can_build = false
+									break
+						else:
+							can_build = false
+							break
+
+			if (can_build):
+				stone_count -= 50
+				plant_count -= 10
 				for x in range(tile.x,  tile.x + size.x):
 					for y in range(tile.y,  tile.y + size.y):
 						world.set_meta(String(tile), String(1))
@@ -187,6 +208,7 @@ func create_building(type, tile):
 			new_build = Algae_gen.instance()
 			new_build.set_position(tile * tile_size)
 			buildings.add_child(new_build)
+			new_build.connect("algae_created", self, "algae_created")
 	update_ui()
 	return new_build
 
